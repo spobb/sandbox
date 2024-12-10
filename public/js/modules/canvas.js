@@ -1,20 +1,25 @@
 import { Cube } from './Cube.js';
 import { Point } from './Point.js';
 import { Prism } from './Prism.js';
+import { Polygon } from './Polygon.js';
 
 export const canvas = document.querySelector('canvas');
 export const ctx = canvas.getContext('2d');
 export let time = 0;
 
-ctx.globalAlpha = 0.2;
+// ctx.globalAlpha = .2;
+
+const RENDER_FACES = true;
 
 let points = [];
 let cubes = [];
 let prisms = [];
+let polygons = [];
+let colors = ['#cccccc', '#aaaaaa', '#aaaaaa', '#999999', '#999999', '#888888',]
 
 let size = 4;
 let count = 100;
-let cubeCount = 10;
+let cubeCount = 50;
 let prismCount = 20;
 
 let distanceToConnect = 256;
@@ -29,6 +34,10 @@ canvas.style.height = `${width}px`;
 canvas.style.height = `${height}px`;
 canvas.width = width;
 canvas.height = height;
+
+function clamp(number, min, max) {
+    return Math.max(Math.min(max, number), min);
+}
 
 function getDistance(p1, p2) {
     let distance = Math.sqrt((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2);
@@ -52,23 +61,102 @@ function createCube(coords, color, speed, dir, size, rotationSpeed) {
 
     // generate each vertex
     let vertices = [
-
-        // front face
-        { x: x, y: y, z: z },
-        { x: x + size, y: y, z: z },
-        { x: x, y: y + size, z: z },
-        { x: x + size, y: y + size, z: z },
-
-        //add depth offset to vertices (back face)
-        { x: x, y: y, z: z + size },
-        { x: x + size, y: y, z: z + size },
-        { x: x, y: y + size, z: z + size },
+        { x: x - size, y: y - size, z: z - size },
+        { x: x + size, y: y - size, z: z - size },
+        { x: x + size, y: y + size, z: z - size },
+        { x: x - size, y: y + size, z: z - size },
+        { x: x - size, y: y - size, z: z + size },
+        { x: x + size, y: y - size, z: z + size },
         { x: x + size, y: y + size, z: z + size },
+        { x: x - size, y: y + size, z: z + size },
     ]
+
+    let faces = [
+        [vertices[0], vertices[1], vertices[2], vertices[3]],
+        [vertices[0], vertices[4], vertices[5], vertices[1]],
+        [vertices[1], vertices[5], vertices[6], vertices[2]],
+        [vertices[3], vertices[2], vertices[6], vertices[7]],
+        [vertices[0], vertices[3], vertices[7], vertices[4]],
+        [vertices[4], vertices[7], vertices[6], vertices[5]],
+    ];
 
     // add generated vertices to object and return object
     cube.vertices = vertices;
+    cube.faces = faces;
     return cube;
+}
+
+function createPolygon(coords, color, speed, dir, size, rotationSpeed) {
+    let x = coords.x;
+    let y = coords.y;
+    let z = coords.z;
+
+    let half = size * 0.5;
+    let quarter = size * 0.25;
+
+    let depth = size * 0.5;
+
+
+    // instantiate Cube object
+    let polygon = new Polygon(x, y, z, color, speed, dir, size, rotationSpeed);
+
+    // generate each vertex
+    let vertices = [
+
+        // front face left
+        { x: x, y: y, z: z },
+        { x: x, y: y + quarter, z: z },
+        { x: x - quarter, y: y + half, z: z },
+        { x: x - half, y: y + half, z: z },
+        { x: x - (quarter + half), y: y + quarter, z: z },
+        { x: x - (quarter + half), y: y, z: z },
+        { x: x - (half), y: y - quarter, z: z },
+        { x: x - quarter, y: y - quarter, z: z },
+
+        // front face right
+        { x: x, y: y + quarter, z: z },
+        { x: x + quarter, y: y + half, z: z },
+        { x: x + half, y: y + half, z: z },
+        { x: x + (quarter + half), y: y + quarter, z: z },
+        { x: x + (quarter + half), y: y, z: z },
+        { x: x + (half), y: y - quarter, z: z },
+        { x: x + quarter, y: y - quarter, z: z },
+
+        // front face middle
+        { x: x - quarter, y: y - size * 1.5, z: z },
+        { x: x - (quarter / 2), y: y - size * 1.5 - quarter, z: z },
+        { x: x + (quarter / 2), y: y - size * 1.5 - quarter, z: z },
+        { x: x + quarter, y: y - size * 1.5, z: z },
+
+        // back face left
+        { x: x, y: y, z: z + depth },
+        { x: x, y: y + quarter, z: z + depth },
+        { x: x - quarter, y: y + half, z: z + depth },
+        { x: x - half, y: y + half, z: z + depth },
+        { x: x - (quarter + half), y: y + quarter, z: z + depth },
+        { x: x - (quarter + half), y: y, z: z + depth },
+        { x: x - (half), y: y - quarter, z: z + depth },
+        { x: x - quarter, y: y - quarter, z: z + depth },
+
+        // back face right
+        { x: x, y: y + quarter, z: z + depth },
+        { x: x + quarter, y: y + half, z: z + depth },
+        { x: x + half, y: y + half, z: z + depth },
+        { x: x + (quarter + half), y: y + quarter, z: z + depth },
+        { x: x + (quarter + half), y: y, z: z + depth },
+        { x: x + (half), y: y - quarter, z: z + depth },
+        { x: x + quarter, y: y - quarter, z: z + depth },
+
+        // back face middle
+        { x: x - quarter, y: y - size * 1.5, z: z + depth },
+        { x: x - (quarter / 2), y: y - size * 1.5 - quarter, z: z + depth },
+        { x: x + (quarter / 2), y: y - size * 1.5 - quarter, z: z + depth },
+        { x: x + quarter, y: y - size * 1.5, z: z + depth },
+    ]
+
+    // add generated vertices to object and return object
+    polygon.vertices = vertices;
+    return polygon;
 }
 
 function createPrism(coords, color, speed, dir, size, rotationSpeed) {
@@ -88,23 +176,43 @@ function createPrism(coords, color, speed, dir, size, rotationSpeed) {
         { x: x + size, y: y, z: z },
 
         // top point (height along z axis)
-        { x: x + size / 2, y: y + size / 2, z: z + size * Math.random() * 2 },
+        { x: x + size / 2, y: y + size / 2, z: clamp(z + size * Math.random() * 2, size, size * 2) },
     ]
+
+    let faces = [
+        [vertices[0], vertices[1], vertices[2]],
+        [vertices[0], vertices[1], vertices[3]],
+        [vertices[1], vertices[2], vertices[3]],
+        [vertices[2], vertices[0], vertices[3]],
+    ];
 
     // add generated vertices to object and return object
     prism.vertices = vertices;
+    prism.faces = faces;
     return prism;
 }
 
 function createLine(startPoint, endPoint, color) {
     ctx.beginPath();
     ctx.strokeStyle = color;
-    ctx.lineWidth = 2;
+    ctx.fillStyle = color;
+    ctx.lineWidth = 1;
 
     // create line between centers of two points
-    ctx.moveTo(startPoint.x + size / 2, startPoint.y + size / 2)
-    ctx.lineTo(endPoint.x + size / 2, endPoint.y + size / 2)
+    ctx.moveTo(startPoint.x, startPoint.y)
+    ctx.lineTo(endPoint.x, endPoint.y)
     ctx.stroke();
+    ctx.closePath();
+}
+
+function createFace(face, color) {
+    ctx.beginPath();
+    ctx.moveTo(face[0].x, face[0].y)
+    for (let i = 1; i < face.length; i++) {
+        ctx.lineTo(face[i].x, face[i].y)
+    }
+    ctx.fillStyle = color;
+    ctx.fill();
     ctx.closePath();
 }
 
@@ -165,9 +273,43 @@ function update() {
         c.updatePos();
         c.checkCollisions();
 
-        // create lines between all pairs of vertices (edges)
+        if (RENDER_FACES) {
+            for (let i = c.faces.length - 1; i > -1; --i) {
+                let f = c.faces[i];
+
+                // get normals
+                let p1 = f[0];
+                let p2 = f[1];
+                let p3 = f[2];
+
+                let u = { x: p2.x - p1.x, y: p2.y - p1.y, z: p2.z - p1.z };
+                let v = { x: p3.x - p1.x, y: p3.y - p1.y, z: p3.z - p1.z };
+
+                let normal = {
+                    x: u.y * v.z - u.z * v.y,
+                    y: u.z * v.x - u.x * v.z,
+                    z: u.x * v.y - u.y * v.x
+                };
+
+                // if (-(p1.x) * normal.x + -(p1.y) * normal.y + -(p1.z) * normal.z <= 0) {
+                createFace(f, colors[i]);
+                // }
+            }
+        }
+
+        // create lines between all pairs of vertices(edges)
         c.linePairs.forEach(pair => {
             createLine(c.vertices[pair[0]], c.vertices[pair[1]], c.color);
+        })
+    })
+
+    polygons.forEach((p) => {
+        p.updatePos();
+        p.checkCollisions();
+
+        // create lines between all pairs of vertices (edges)
+        p.linePairs.forEach(pair => {
+            createLine(p.vertices[pair[0]], p.vertices[pair[1]], p.color);
         })
     })
 
@@ -175,6 +317,14 @@ function update() {
     prisms.forEach((p) => {
         p.updatePos();
         p.checkCollisions();
+
+        if (RENDER_FACES) {
+            for (let i = p.faces.length - 1; i > -1; --i) {
+                let f = p.faces[i];
+
+                createFace(f, colors[i]);
+            }
+        }
 
         // create lines between all pairs of vertices (edges)
         p.linePairs.forEach(pair => {
@@ -188,21 +338,21 @@ for (let i = 0; i < count; ++i) {
     points.push(point);
 }
 for (let i = 0; i < cubeCount; i++) {
-    let cube = createCube(getCoords(), '#4f4f5f', 1, getDirection(), Math.random() * 200, getRotationSpeed());
+    let cube = createCube(getCoords(), '#4f4f5f', .1, getDirection(), clamp(Math.random() * 80, 20, 80), getRotationSpeed());
     cubes.push(cube);
 }
 for (let i = 0; i < prismCount; i++) {
-    let prism = createPrism(getCoords(), '#4f4f5f', 0, getDirection(), Math.random() * 200, getRotationSpeed());
+    let prism = createPrism(getCoords(), '#4f4f5f', 0, getDirection(), clamp(Math.random() * 100, 30, 100), getRotationSpeed());
     prisms.push(prism);
 }
 
 // Add a cube at cursor position on click
 
 document.addEventListener('click', e => {
-    let cube = createCube({ x: e.pageX, y: e.pageY, z: 100 }, '#4f4f5f', 1, getDirection(), Math.random() * 200, getRotationSpeed());
-    cubes.push(cube);
-})
+    cubes.push(createCube({ x: e.pageX, y: e.pageY, z: 100 }, '#4f4f5f', .1, getDirection(), clamp(Math.random() * 50, 10, 50), getRotationSpeed()));
 
+    // polygons.push(createPolygon({ x: e.pageX, y: e.pageY, z: 100 }, '#4f4f5f', 1, getDirection(), Math.random() * 200, getRotationSpeed()));
+})
 // Resize canvas if window resized and draw loop
 
 setInterval(() => {

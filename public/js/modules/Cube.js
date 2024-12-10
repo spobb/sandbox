@@ -15,13 +15,18 @@ export class Cube {
         // initialize vertices array
         this.vertices = [];
 
+        // initialize velocity vector
         this.velocity = { x: 0, y: 0, z: 0 };
 
+        // calculate velocity from speed and direction
         this.velocity.x = this.speed * Math.cos(this.dir);
         this.velocity.y = this.speed * Math.sin(this.dir);
+
+        // matrix of pairs of vertices, each representing an edge to draw
+        this.linePairs = [[0, 1], [1, 3], [3, 2], [2, 0], [4, 5], [5, 7], [7, 6], [6, 4], [0, 4], [1, 5], [2, 6], [3, 7]];
     }
 
-    // check collisions
+    // check collisions with walls
     checkCollisions() {
         if (this.x > (canvas.width - this.size - this.depth)) {
             this.velocity.x *= -1;
@@ -37,10 +42,12 @@ export class Cube {
         }
     }
 
-    // update position based on speed vector
     updatePos() {
+        // update position of object based on current velocity
         this.x += this.velocity.x;
         this.y += this.velocity.y;
+
+        // update position of each vertex based on rotation
 
         // rotate Z axis
         let angle = time * this.rotationSpeed.z * Math.PI * 2;

@@ -1,5 +1,6 @@
 import { Cube } from './Cube.js';
 import { Point } from './Point.js';
+import { Prism } from './Prism.js';
 
 export const canvas = document.querySelector('canvas');
 export const ctx = canvas.getContext('2d');
@@ -9,10 +10,12 @@ ctx.globalAlpha = 0.2;
 
 let points = [];
 let cubes = [];
+let prisms = [];
 
-let size = 0;
-let count = 0;
+let size = 4;
+let count = 100;
 let cubeCount = 10;
+let prismCount = 20;
 
 let distanceToConnect = 256;
 
@@ -33,33 +36,72 @@ function getDistance(p1, p2) {
     return distance;
 }
 
-function createPoint(x, y, color, speed, dir, size) {
+function createPoint(coords, color, speed, dir, size) {
+    let x = coords.x;
+    let y = coords.y;
     return new Point(x, y, color, speed, dir, size);
 }
 
-function createCube(x, y, z, color, speed, dir, size, rotationSpeed) {
+function createCube(coords, color, speed, dir, size, rotationSpeed) {
+    let x = coords.x;
+    let y = coords.y;
+    let z = coords.z;
+
+    // instantiate Cube object
     let cube = new Cube(x, y, z, color, speed, dir, size, rotationSpeed);
+
     // generate each vertex
     let vertices = [
+
+        // front face
         { x: x, y: y, z: z },
         { x: x + size, y: y, z: z },
         { x: x, y: y + size, z: z },
         { x: x + size, y: y + size, z: z },
 
-        //add depth offset to vertices
+        //add depth offset to vertices (back face)
         { x: x, y: y, z: z + size },
         { x: x + size, y: y, z: z + size },
         { x: x, y: y + size, z: z + size },
         { x: x + size, y: y + size, z: z + size },
     ]
+
+    // add generated vertices to object and return object
     cube.vertices = vertices;
     return cube;
+}
+
+function createPrism(coords, color, speed, dir, size, rotationSpeed) {
+    let x = coords.x;
+    let y = coords.y;
+    let z = coords.z;
+
+    // instantiate prism object
+    let prism = new Prism(x, y, z, color, speed, dir, size, rotationSpeed);
+
+    // generate each vertex
+    let vertices = [
+
+        // triangle base
+        { x: x, y: y, z: z },
+        { x: x + size / 2, y: y + Math.sqrt((size ** 2) - (size ** 2) / 4), z: z },
+        { x: x + size, y: y, z: z },
+
+        // top point (height along z axis)
+        { x: x + size / 2, y: y + size / 2, z: z + size * Math.random() * 2 },
+    ]
+
+    // add generated vertices to object and return object
+    prism.vertices = vertices;
+    return prism;
 }
 
 function createLine(startPoint, endPoint, color) {
     ctx.beginPath();
     ctx.strokeStyle = color;
     ctx.lineWidth = 2;
+
+    // create line between centers of two points
     ctx.moveTo(startPoint.x + size / 2, startPoint.y + size / 2)
     ctx.lineTo(endPoint.x + size / 2, endPoint.y + size / 2)
     ctx.stroke();
@@ -81,6 +123,13 @@ function getRotationSpeed() {
     }
 
 }
+function getCoords() {
+    return {
+        x: Math.floor(Math.random() * canvas.width),
+        y: Math.floor(Math.random() * canvas.height),
+        z: Math.floor(Math.random()) * 1000,
+    }
+}
 function getDirection() {
     return Math.random() * Math.PI * 2
 }
@@ -97,9 +146,6 @@ function update() {
         p.updatePos();
         p.checkCollisions();
 
-        //draw lines between points
-        // createLine(points[i], { x: width / 2, y: 2000 }, '#3f3f4f');
-
         //draw all points
         ctx.fillStyle = p.color;
         ctx.fillRect(p.x, p.y, size, size);
@@ -115,46 +161,49 @@ function update() {
     });
 
     //loop over every cube
-    cubes.forEach((p) => {
+    cubes.forEach((c) => {
+        c.updatePos();
+        c.checkCollisions();
+
+        // create lines between all pairs of vertices (edges)
+        c.linePairs.forEach(pair => {
+            createLine(c.vertices[pair[0]], c.vertices[pair[1]], c.color);
+        })
+    })
+
+    // loop over each prism
+    prisms.forEach((p) => {
         p.updatePos();
         p.checkCollisions();
 
-        // create lines between all vertices
-        createLine(p.vertices[0], p.vertices[1], p.color);
-        createLine(p.vertices[1], p.vertices[3], p.color);
-        createLine(p.vertices[3], p.vertices[2], p.color);
-        createLine(p.vertices[2], p.vertices[0], p.color);
-
-        createLine(p.vertices[4], p.vertices[5], p.color);
-        createLine(p.vertices[5], p.vertices[7], p.color);
-        createLine(p.vertices[7], p.vertices[6], p.color);
-        createLine(p.vertices[6], p.vertices[4], p.color);
-
-        createLine(p.vertices[0], p.vertices[4], p.color);
-        createLine(p.vertices[1], p.vertices[5], p.color);
-        createLine(p.vertices[2], p.vertices[6], p.color);
-        createLine(p.vertices[3], p.vertices[7], p.color);
-
-
+        // create lines between all pairs of vertices (edges)
+        p.linePairs.forEach(pair => {
+            createLine(p.vertices[pair[0]], p.vertices[pair[1]], p.color);
+        })
     })
 }
 
 for (let i = 0; i < count; ++i) {
-    let point = createPoint(Math.floor(Math.random() * canvas.width), Math.floor(Math.random() * canvas.height), '#4f4f5f', getSpeed(), getDirection(), size);
+    let point = createPoint(getCoords(), '#4f4f5f', getSpeed(), getDirection(), size);
     points.push(point);
-
 }
 for (let i = 0; i < cubeCount; i++) {
-    let cube = createCube(Math.floor(Math.random() * canvas.width), Math.floor(Math.random() * canvas.height), Math.floor(Math.random() * 1000), '#4f4f5f', 0, getDirection(), Math.random() * 200, getRotationSpeed());
+    let cube = createCube(getCoords(), '#4f4f5f', 1, getDirection(), Math.random() * 200, getRotationSpeed());
     cubes.push(cube);
 }
+for (let i = 0; i < prismCount; i++) {
+    let prism = createPrism(getCoords(), '#4f4f5f', 0, getDirection(), Math.random() * 200, getRotationSpeed());
+    prisms.push(prism);
+}
+
+// Add a cube at cursor position on click
 
 document.addEventListener('click', e => {
-    // points.push(createPoint(e.pageX, e.pageY, '#4f4f5f', getSpeed(), getDirection()));
-    let cube = createCube(e.pageX, e.pageY, 0, '#4f4f5f', 0, getDirection(), Math.random() * 200, getRotationSpeed());
-    console.log(cube.vertices)
+    let cube = createCube({ x: e.pageX, y: e.pageY, z: 100 }, '#4f4f5f', 1, getDirection(), Math.random() * 200, getRotationSpeed());
     cubes.push(cube);
 })
+
+// Resize canvas if window resized and draw loop
 
 setInterval(() => {
     height = document.body.scrollHeight;

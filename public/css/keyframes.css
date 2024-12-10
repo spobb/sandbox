@@ -1,0 +1,85 @@
+@keyframes blur-transition {
+    from {
+        filter: blur(10px);
+        color: transparent;
+    }
+    to {
+        filter: blur(0);
+        color: #eee;
+    }
+}
+@keyframes header-transition {
+    from {
+        filter: blur(10px);
+        transform: translateY(-10vh);
+    }
+    50% {
+        filter: blur(10px);
+        transform: translateY(-10vh);
+    }
+    to {
+        filter: blur(0);
+        transform: translateY(0);
+    }
+}
+@keyframes pulse {
+    from {
+        scale: 100%;
+    }
+    40% {
+        scale: 110%;
+    }
+    45% {
+        scale: 115%;
+    }
+    50% {
+        scale: 110%;
+    }
+    55% {
+        scale: 100%;
+    }
+    60% {
+        scale: 95%;
+    }
+    70% {
+        scale: 100%;
+    }
+}
+@keyframes cursor {
+    from {
+        background-position: 90% 100%;
+        transform: none;
+    }
+    10% {
+        color: #eee;
+    }
+    11% {
+        color: #aaa;
+    }
+    25% {
+        background-position: 55% 65%;
+        color: #aaa;
+    }
+    35% {
+        color: #aaa;
+    }
+    36% {
+        color: #eee;
+    }
+    50% {
+        background-position: 90% 100%;
+    }
+    to {
+        background-position: 90% 100%;
+    }
+}
+@keyframes bg-slide {
+    from {
+        background-position: 100%;
+        background-position-y: 0%;
+    }
+    to {
+        background-position: 0%;
+        background-position-y: 100%;
+    }
+}

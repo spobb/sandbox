@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="public/css/style.css">
+    <link rel="stylesheet" href="public/css/keyframes.css">
+</head>
+
+<body>
+    <canvas>
+    </canvas>
+    <header>
+        <div class="language-switch" id="lang-picker">
+            <label>
+                <input type="radio" name="lang" value="en" checked>
+                English
+            </label>
+            <label>
+                <input type="radio" name="lang" value="fr">
+                Français
+            </label>
+        </div>
+    </header>
+    <main>
+        <!-- <div class="moving-bg"> -->
+        <section class="flex hero scroll-snap-point">
+            <h1 class="transition text-shadow" lang="en">Hello!</h1>
+            <h1 class="transition text-shadow" lang="fr">Bonjour !</h1>
+            <!-- <h2 class="transition text-shadow" lang="en">Click anywhere to continue</h2>
+                <h2 class="transition text-shadow" lang="fr">Appuyez n'importe où pour continuer.</h2> -->
+        </section>
+        <section class="scroll-snap-point">
+            <div class="text-container text-shadow">
+                <h2 lang="en">My name is Guillaume. </h2>
+                <h2 lang="fr">Je m'appelle Guillaume. </h2>
+                <p lang="en">I am a young apprentice web developer,</p>
+                <p lang="fr">Je suis un jeune apprenant développeur web,</p>
+                <p lang="en">and I'm currently learning HTML, CSS, JS & PHP at the <a href="https://www.efp.be"
+                        class="inline-link" target="_blank">EFP</a>, a school in Uccle.</p>
+                <p lang="fr">j'étudie l'HTML, le CSS, le JS et le PHP à l'<a href="https://www.efp.be"
+                        class="inline-link" target="_blank">EFP</a>, une
+                    école à Uccle.</p>
+            </div>
+            <div class=" waves-top divider top">
+                <div class="top layer1 animation-start waves-hover"></div>
+                <div class="top layer2 animation-start waves-hover"></div>
+                <div class="top layer3 animation-start waves-hover"></div>
+                <div class="top layer4 animation-start waves-hover"></div>
+                <div class="top layer5 animation-start waves-hover"></div>
+            </div>
+        </section>
+        <!-- </div> -->
+        <section class="flex magenta scroll-snap-point">
+            <div class="text-container text-shadow">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa assumenda a ipsum aperiam est
+                    excepturi provident, tempora sunt cupiditate, dolores, earum placeat voluptatem autem quidem.
+                    Odio
+                    magnam ipsum deserunt unde numquam necessitatibus incidunt expedita nostrum eius mollitia
+                    possimus
+                    quas beatae repellat ducimus, blanditiis deleniti? Pariatur ut perspiciatis labore fugit
+                    reprehenderit?</p>
+            </div>
+        </section>
+        <section class="scroll-snap-point">
+            <div class=" waves-bottom divider bottom">
+                <div class="bottom-layer1 animation-start waves-hover"></div>
+                <div class="bottom-layer2 animation-start waves-hover"></div>
+                <div class="bottom-layer3 animation-start waves-hover"></div>
+                <div class="bottom-layer4 animation-start waves-hover"></div>
+                <div class="bottom-layer5 animation-start waves-hover"></div>
+            </div>
+            <a href="https://www.svgbackgrounds.com/set/free-svg-backgrounds-and-patterns/">Free SVG Backgrounds and
+                Patterns by SVGBackgrounds.com</a>
+        </section>
+    </main>
+    <div class="mouse-overlay"></div>
+    <script src="/public/js/app.js"></script>
+    <script src="/public/js/language.js"></script>
+    <script src="public/js/mouse-overlay.js"></script>
+    <script src="public/js/canvas.js"></script>
+</body>
+
+</html>

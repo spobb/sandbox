@@ -1,0 +1,204 @@
+:root {
+    --x: 0;
+    --y: 0;
+}
+* {
+    margin: 0;
+    padding: 0;
+    font-family: Roboto;
+    letter-spacing: 2px;
+    color: #eee;
+    user-select: none;
+}
+::-webkit-scrollbar {
+    display: none;
+}
+html {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+body, html {
+    background-color: transparent;
+    scroll-snap-type: y mandatory;
+}
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+}
+header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+.mouse-overlay {
+    position: relative;
+    padding: .5rem;
+    &::before {
+        content: '';
+        position: absolute;
+        pointer-events: none;
+        inset: 0px;
+        background: radial-gradient(200px circle at var(--x) var(--y), #c62368, transparent);
+    }
+    & > div {
+        position: relative;
+        padding: 1rem;
+        background-color: #191920;
+    }
+}
+main {}
+.waves-top {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow-y: hidden;
+}
+.waves-bottom {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow-y: hidden;
+}
+.flex, section {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+.hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10vh;
+    & h1 {
+        font-size: 5rem;
+    }
+    & h2 {
+        text-shadow: none;
+        font-size: 1.2rem;
+        animation: 1s 4s infinite pulse, .5s 4s 1 blur-transition;
+    }
+}
+.text-container {
+    padding: 10rem;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 1rem;
+    & > * {
+        font-size: 2.5rem;
+    }
+    & h2 {
+        font-size: 3rem;
+        padding-bottom: 1rem;
+    }
+}
+.transition {
+    animation: blur-transition 2s 1;
+}
+.nav-left {
+    margin-right: auto;
+}
+.nav-right {
+    margin-left: auto;
+}
+a {
+    text-decoration: none;
+    padding: 1rem;
+}
+.divider > * {
+    position: absolute;
+    width: 100%;
+    height: fit-content;
+    background-repeat: repeat;
+    background-size: cover;
+    aspect-ratio: 960/192;
+    &.top {
+        bottom: -5vh;
+        left: 0;
+    }
+    &.bottom {
+        top: 5vh;
+        left: 0;
+    }
+}
+.layer1 {
+    transform: translateY(60%);
+    background-image: url(/public/assets/wave-top/top-1.svg);
+}
+.layer2 {
+    transform: translateY(50%);
+    background-image: url(/public/assets/wave-top/top-2.svg);
+}
+.layer3 {
+    transform: translateY(40%);
+    background-image: url(/public/assets/wave-top/top-3.svg);
+}
+.layer4 {
+    transform: translateY(20%);
+    background-image: url(/public/assets/wave-top/top-4.svg);
+}
+.layer5 {
+    transform: translateY(10%);
+    background-image: url(/public/assets/wave-top/top-5.svg);
+}
+.bottom-layer1 {
+    transform: translateY(-60%);
+    background-image: url(/public/assets/wave-bottom/bottom-1.svg);
+}
+.bottom-layer2 {
+    transform: translateY(-50%);
+    background-image: url(/public/assets/wave-bottom/bottom-2.svg);
+}
+.bottom-layer3 {
+    transform: translateY(-40%);
+    background-image: url(/public/assets/wave-bottom/bottom-3.svg);
+}
+.bottom-layer4 {
+    transform: translateY(-20%);
+    background-image: url(/public/assets/wave-bottom/bottom-4.svg);
+}
+.bottom-layer5 {
+    transform: translateY(-10%);
+    background-image: url(/public/assets/wave-bottom/bottom-5.svg);
+}
+.animation-end {
+    transform: translateY(0);
+    transition: all 1s;
+}
+.inline-link {
+    color: #eee;
+    font-weight: 500;
+    background-image: url(/public/assets/cursor.svg);
+    background-repeat: no-repeat;
+    background-size: 20%;
+    animation: 2s cursor infinite;
+    padding: 3rem;
+    margin: -3rem;
+}
+.inline-link:hover {
+    color: #aaa;
+}
+.magenta {
+    background-color: #c62368;
+}
+.scroll-snap-point {
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+}
+.text-shadow {
+    text-shadow: #0005 0.5rem 0.5rem 1rem;
+}
+[lang="fr"] {
+    display: none;
+}
+.moving-bg {
+    background: center / 20% repeat url(/public/assets/background.svg);
+    animation: bg-slide 60s infinite linear;
+}

@@ -26,9 +26,11 @@ canvas {
     top: 0;
     left: 0;
     z-index: -1;
-    width: 100%;
+    width: 100vw;
+    transform: scale(1.05);
     height: 100%;
-    filter: blur(2px);
+    filter: blur(1px);
+    transition: filter 1s
 }
 header {
     position: sticky;

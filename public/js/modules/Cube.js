@@ -90,5 +90,6 @@ export class Cube {
             v.x = x + this.x;
             v.z = z + this.z;
         });
+
     }
 }

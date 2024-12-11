@@ -14,3 +14,12 @@ waves.forEach((el) => {
     observer.observe(el);
 });
 
+const canvas = document.querySelector('canvas');
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 500) {
+        canvas.style.filter = 'blur(4px)';
+    } else {
+        canvas.style.filter = 'blur(1px)';
+    }
+})
+

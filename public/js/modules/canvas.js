@@ -7,20 +7,22 @@ export const canvas = document.querySelector('canvas');
 export const ctx = canvas.getContext('2d');
 export let time = 0;
 
-// ctx.globalAlpha = .2;
+ctx.globalAlpha = 1;
 
 const RENDER_FACES = true;
+const FOCAL_LENGTH = 200;
 
 let points = [];
 let cubes = [];
 let prisms = [];
 let polygons = [];
-let colors = ['#cccccc', '#aaaaaa', '#aaaaaa', '#999999', '#999999', '#888888',]
+let colors = ['#cccccc', '#aaaaaa', '#aaaaaa', '#999999', '#999999', '#444444',]
 
-let size = 4;
-let count = 100;
-let cubeCount = 50;
-let prismCount = 20;
+let size = 0;
+let count = 200;
+let cubeCount = 20;
+let polygonCount = 40;
+let prismCount = 30;
 
 let distanceToConnect = 256;
 
@@ -77,7 +79,7 @@ function createCube(coords, color, speed, dir, size, rotationSpeed) {
         [vertices[1], vertices[5], vertices[6], vertices[2]],
         [vertices[3], vertices[2], vertices[6], vertices[7]],
         [vertices[0], vertices[3], vertices[7], vertices[4]],
-        [vertices[4], vertices[7], vertices[6], vertices[5]],
+        [vertices[4], vertices[5], vertices[6], vertices[7]],
     ];
 
     // add generated vertices to object and return object
@@ -102,60 +104,28 @@ function createPolygon(coords, color, speed, dir, size, rotationSpeed) {
 
     // generate each vertex
     let vertices = [
-
-        // front face left
-        { x: x, y: y, z: z },
-        { x: x, y: y + quarter, z: z },
-        { x: x - quarter, y: y + half, z: z },
-        { x: x - half, y: y + half, z: z },
-        { x: x - (quarter + half), y: y + quarter, z: z },
-        { x: x - (quarter + half), y: y, z: z },
-        { x: x - (half), y: y - quarter, z: z },
-        { x: x - quarter, y: y - quarter, z: z },
-
-        // front face right
-        { x: x, y: y + quarter, z: z },
-        { x: x + quarter, y: y + half, z: z },
-        { x: x + half, y: y + half, z: z },
-        { x: x + (quarter + half), y: y + quarter, z: z },
-        { x: x + (quarter + half), y: y, z: z },
-        { x: x + (half), y: y - quarter, z: z },
-        { x: x + quarter, y: y - quarter, z: z },
-
-        // front face middle
-        { x: x - quarter, y: y - size * 1.5, z: z },
-        { x: x - (quarter / 2), y: y - size * 1.5 - quarter, z: z },
-        { x: x + (quarter / 2), y: y - size * 1.5 - quarter, z: z },
-        { x: x + quarter, y: y - size * 1.5, z: z },
-
-        // back face left
-        { x: x, y: y, z: z + depth },
-        { x: x, y: y + quarter, z: z + depth },
-        { x: x - quarter, y: y + half, z: z + depth },
-        { x: x - half, y: y + half, z: z + depth },
-        { x: x - (quarter + half), y: y + quarter, z: z + depth },
-        { x: x - (quarter + half), y: y, z: z + depth },
-        { x: x - (half), y: y - quarter, z: z + depth },
-        { x: x - quarter, y: y - quarter, z: z + depth },
-
-        // back face right
-        { x: x, y: y + quarter, z: z + depth },
-        { x: x + quarter, y: y + half, z: z + depth },
-        { x: x + half, y: y + half, z: z + depth },
-        { x: x + (quarter + half), y: y + quarter, z: z + depth },
-        { x: x + (quarter + half), y: y, z: z + depth },
-        { x: x + (half), y: y - quarter, z: z + depth },
-        { x: x + quarter, y: y - quarter, z: z + depth },
-
-        // back face middle
-        { x: x - quarter, y: y - size * 1.5, z: z + depth },
-        { x: x - (quarter / 2), y: y - size * 1.5 - quarter, z: z + depth },
-        { x: x + (quarter / 2), y: y - size * 1.5 - quarter, z: z + depth },
-        { x: x + quarter, y: y - size * 1.5, z: z + depth },
+        { x: x - size * Math.random(), y: y - size * Math.random(), z: z - size * Math.random() },
+        { x: x + size * Math.random(), y: y - size * Math.random(), z: z - size },
+        { x: x + size * Math.random(), y: y + size * Math.random(), z: z - size },
+        { x: x - size * Math.random(), y: y + size, z: z - size },
+        { x: x - size * Math.random(), y: y - size, z: z + size * Math.random() },
+        { x: x + size * Math.random(), y: y - size, z: z + size },
+        { x: x + size * Math.random(), y: y + size * Math.random(), z: z + size },
+        { x: x - size * Math.random(), y: y + size, z: z + size },
     ]
+
+    let faces = [
+        [vertices[0], vertices[1], vertices[2], vertices[3]],
+        [vertices[0], vertices[4], vertices[5], vertices[1]],
+        [vertices[1], vertices[5], vertices[6], vertices[2]],
+        [vertices[3], vertices[2], vertices[6], vertices[7]],
+        [vertices[0], vertices[3], vertices[7], vertices[4]],
+        [vertices[4], vertices[5], vertices[6], vertices[7]],
+    ];
 
     // add generated vertices to object and return object
     polygon.vertices = vertices;
+    polygon.faces = faces;
     return polygon;
 }
 
@@ -191,7 +161,16 @@ function createPrism(coords, color, speed, dir, size, rotationSpeed) {
     prism.faces = faces;
     return prism;
 }
-
+function project(vertices, width, height) {
+    let points2d = new Array(vertices.length);
+    vertices.forEach((v, i) => {
+        let x = v.x * (FOCAL_LENGTH / v.z) + width * 0.5;
+        let y = v.y * (FOCAL_LENGTH / v.z) + height * 0.5;
+        console.log(x, y, v.x, v.y, vertices[0], vertices[1])
+        points2d[i] = { x: x, y: y };
+    })
+    return points2d;
+}
 function createLine(startPoint, endPoint, color) {
     ctx.beginPath();
     ctx.strokeStyle = color;
@@ -235,7 +214,7 @@ function getCoords() {
     return {
         x: Math.floor(Math.random() * canvas.width),
         y: Math.floor(Math.random() * canvas.height),
-        z: Math.floor(Math.random()) * 1000,
+        z: Math.floor(Math.random()) * -10,
     }
 }
 function getDirection() {
@@ -273,6 +252,8 @@ function update() {
         c.updatePos();
         c.checkCollisions();
 
+
+        // let vertices = project(c.vertices, canvas.width, canvas.height);
         if (RENDER_FACES) {
             for (let i = c.faces.length - 1; i > -1; --i) {
                 let f = c.faces[i];
@@ -290,13 +271,11 @@ function update() {
                     y: u.z * v.x - u.x * v.z,
                     z: u.x * v.y - u.y * v.x
                 };
-
-                // if (-(p1.x) * normal.x + -(p1.y) * normal.y + -(p1.z) * normal.z <= 0) {
                 createFace(f, colors[i]);
+                // if (-(p1.x) * normal.x + -(p1.y) * normal.y + -(p1.z) * normal.z <= 0) {
                 // }
             }
         }
-
         // create lines between all pairs of vertices(edges)
         c.linePairs.forEach(pair => {
             createLine(c.vertices[pair[0]], c.vertices[pair[1]], c.color);
@@ -306,6 +285,13 @@ function update() {
     polygons.forEach((p) => {
         p.updatePos();
         p.checkCollisions();
+
+        if (RENDER_FACES) {
+            for (let i = p.faces.length - 1; i > -1; --i) {
+                let f = p.faces[i];
+                createFace(f, colors[i]);
+            }
+        }
 
         // create lines between all pairs of vertices (edges)
         p.linePairs.forEach(pair => {
@@ -321,7 +307,6 @@ function update() {
         if (RENDER_FACES) {
             for (let i = p.faces.length - 1; i > -1; --i) {
                 let f = p.faces[i];
-
                 createFace(f, colors[i]);
             }
         }
@@ -340,6 +325,10 @@ for (let i = 0; i < count; ++i) {
 for (let i = 0; i < cubeCount; i++) {
     let cube = createCube(getCoords(), '#4f4f5f', .1, getDirection(), clamp(Math.random() * 80, 20, 80), getRotationSpeed());
     cubes.push(cube);
+}
+for (let i = 0; i < polygonCount; i++) {
+    let polygon = createPolygon(getCoords(), '#4f4f5f', .5, getDirection(), clamp(Math.random() * 80, 20, 80), getRotationSpeed());
+    polygons.push(polygon);
 }
 for (let i = 0; i < prismCount; i++) {
     let prism = createPrism(getCoords(), '#4f4f5f', 0, getDirection(), clamp(Math.random() * 100, 30, 100), getRotationSpeed());

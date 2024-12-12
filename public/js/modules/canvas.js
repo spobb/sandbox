@@ -7,36 +7,6 @@ export const canvas = document.querySelector('canvas');
 export const ctx = canvas.getContext('2d');
 export let time = 0;
 
-ctx.globalAlpha = 1;
-
-const RENDER_FACES = true;
-const FOCAL_LENGTH = 200;
-
-let points = [];
-let cubes = [];
-let prisms = [];
-let polygons = [];
-let colors = ['#cccccc', '#aaaaaa', '#aaaaaa', '#999999', '#999999', '#444444',]
-
-let size = 0;
-let count = 200;
-let cubeCount = 20;
-let polygonCount = 40;
-let prismCount = 30;
-
-let distanceToConnect = 256;
-
-let speedMultiplier = .5;
-let rotationSpeedMultiplier = .1;
-
-let height = document.body.scrollHeight;
-let width = document.body.scrollWidth;
-canvas.style.background = "#191920"
-canvas.style.height = `${width}px`;
-canvas.style.height = `${height}px`;
-canvas.width = width;
-canvas.height = height;
-
 function clamp(number, min, max) {
     return Math.max(Math.min(max, number), min);
 }
@@ -175,7 +145,7 @@ function createLine(startPoint, endPoint, color) {
     ctx.beginPath();
     ctx.strokeStyle = color;
     ctx.fillStyle = color;
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 2;
 
     // create line between centers of two points
     ctx.moveTo(startPoint.x, startPoint.y)
@@ -214,7 +184,7 @@ function getCoords() {
     return {
         x: Math.floor(Math.random() * canvas.width),
         y: Math.floor(Math.random() * canvas.height),
-        z: Math.floor(Math.random()) * -10,
+        z: Math.floor(Math.random()) * -100,
     }
 }
 function getDirection() {
@@ -223,6 +193,37 @@ function getDirection() {
 function getColor(alpha) {
     return `rgba(100, 100, 120, ${(300 - alpha) / 255})`;
 }
+
+const DRAW_CENTER = false;
+const RENDER_FACES = true;
+const COLORED_CUBES = false;
+
+let points = [];
+let cubes = [];
+let prisms = [];
+let polygons = [];
+let colors = ['#cccccc', '#aaaaaa', '#aaaaaa', '#999999', '#999999', '#444444',]
+
+export let size = 0;
+export let count = 200;
+export let cubeCount = 20;
+export let polygonCount = 20;
+export let prismCount = 20;
+
+let distanceToConnect = 256;
+
+export let speedMultiplier = .5;
+export let rotationSpeedMultiplier = .1;
+
+ctx.globalAlpha = 1;
+let height = document.body.scrollHeight;
+let width = document.body.scrollWidth;
+canvas.style.background = "#191920"
+canvas.style.height = `${width}px`;
+canvas.style.height = `${height}px`;
+canvas.width = width;
+canvas.height = height;
+
 function update() {
     //clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -230,8 +231,8 @@ function update() {
     //loop over every point
     points.forEach((p) => {
         // collisions then update positions
-        p.updatePos();
         p.checkCollisions();
+        p.updatePos();
 
         //draw all points
         ctx.fillStyle = p.color;
@@ -249,8 +250,8 @@ function update() {
 
     //loop over every cube
     cubes.forEach((c) => {
-        c.updatePos();
         c.checkCollisions();
+        c.updatePos();
 
 
         // let vertices = project(c.vertices, canvas.width, canvas.height);
@@ -271,10 +272,19 @@ function update() {
                     y: u.z * v.x - u.x * v.z,
                     z: u.x * v.y - u.y * v.x
                 };
-                createFace(f, colors[i]);
                 // if (-(p1.x) * normal.x + -(p1.y) * normal.y + -(p1.z) * normal.z <= 0) {
+                if (COLORED_CUBES) {
+                    createFace(f, `hsl(${((((c.x + c.y) / (canvas.width + canvas.height)) * 255) + time)}, ${70 - (i * 2)}%, 70%)`);
+                } else {
+                    createFace(f, colors[i]);
+                }
                 // }
             }
+        }
+        //draw centers
+        if (DRAW_CENTER) {
+            ctx.fillStyle = 'red';
+            ctx.fillRect(c.x, c.y, 10, 10);
         }
         // create lines between all pairs of vertices(edges)
         c.linePairs.forEach(pair => {
@@ -283,8 +293,8 @@ function update() {
     })
 
     polygons.forEach((p) => {
-        p.updatePos();
         p.checkCollisions();
+        p.updatePos();
 
         if (RENDER_FACES) {
             for (let i = p.faces.length - 1; i > -1; --i) {
@@ -301,8 +311,8 @@ function update() {
 
     // loop over each prism
     prisms.forEach((p) => {
-        p.updatePos();
         p.checkCollisions();
+        p.updatePos();
 
         if (RENDER_FACES) {
             for (let i = p.faces.length - 1; i > -1; --i) {
@@ -318,32 +328,33 @@ function update() {
     })
 }
 
+// Initialize objects
 for (let i = 0; i < count; ++i) {
     let point = createPoint(getCoords(), '#4f4f5f', getSpeed(), getDirection(), size);
     points.push(point);
 }
 for (let i = 0; i < cubeCount; i++) {
-    let cube = createCube(getCoords(), '#4f4f5f', .1, getDirection(), clamp(Math.random() * 80, 20, 80), getRotationSpeed());
+    let cube = createCube(getCoords(), '#4f4f5f', .5, getDirection(), clamp(Math.random() * 80, 20, 80), getRotationSpeed());
     cubes.push(cube);
 }
 for (let i = 0; i < polygonCount; i++) {
-    let polygon = createPolygon(getCoords(), '#4f4f5f', .5, getDirection(), clamp(Math.random() * 80, 20, 80), getRotationSpeed());
+    let polygon = createPolygon(getCoords(), '#4f4f5f', .2, getDirection(), clamp(Math.random() * 80, 20, 80), getRotationSpeed());
     polygons.push(polygon);
 }
 for (let i = 0; i < prismCount; i++) {
-    let prism = createPrism(getCoords(), '#4f4f5f', 0, getDirection(), clamp(Math.random() * 100, 30, 100), getRotationSpeed());
+    let prism = createPrism(getCoords(), '#4f4f5f', .5, getDirection(), clamp(Math.random() * 100, 30, 100), getRotationSpeed());
     prisms.push(prism);
 }
 
 // Add a cube at cursor position on click
 
 document.addEventListener('click', e => {
-    cubes.push(createCube({ x: e.pageX, y: e.pageY, z: 100 }, '#4f4f5f', .1, getDirection(), clamp(Math.random() * 50, 10, 50), getRotationSpeed()));
+    cubes.push(createCube({ x: e.pageX, y: e.pageY, z: 100 }, '#4f4f5f', .5, getDirection(), clamp(Math.random() * 50, 10, 50), getRotationSpeed()));
 
     // polygons.push(createPolygon({ x: e.pageX, y: e.pageY, z: 100 }, '#4f4f5f', 1, getDirection(), Math.random() * 200, getRotationSpeed()));
 })
-// Resize canvas if window resized and draw loop
 
+// Resize canvas if window resized and draw loop
 setInterval(() => {
     height = document.body.scrollHeight;
     width = document.body.scrollWidth;

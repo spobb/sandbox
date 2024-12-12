@@ -12,14 +12,21 @@
         href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
         rel="stylesheet">
 
-    <link rel="stylesheet" href="public/css/style.css">
+    <link rel="stylesheet" href="public/css/extra.css">
     <link rel="stylesheet" href="public/css/keyframes.css">
+    <link rel="stylesheet" href="public/css/main.css">
 </head>
 
 <body>
     <canvas>
     </canvas>
-    <header>
+    <header class="card">
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
         <div class="language-switch" id="lang-picker">
             <label>
                 <input type="radio" name="lang" value="en" checked>
@@ -40,16 +47,18 @@
                 <h2 class="transition text-shadow" lang="fr">Appuyez n'importe où pour continuer.</h2> -->
         </section>
         <section class="scroll-snap-point">
-            <div class="text-container text-shadow">
-                <h2 lang="en">My name is Guillaume. </h2>
-                <h2 lang="fr">Je m'appelle Guillaume. </h2>
-                <p lang="en">I am a young apprentice web developer,</p>
-                <p lang="fr">Je suis un jeune apprenant développeur web,</p>
-                <p lang="en">and I'm currently learning HTML, CSS, JS & PHP at the <a href="https://www.efp.be"
-                        class="inline-link" target="_blank">EFP</a>, a school in Uccle.</p>
-                <p lang="fr">j'étudie l'HTML, le CSS, le JS et le PHP à l'<a href="https://www.efp.be"
-                        class="inline-link" target="_blank">EFP</a>, une
-                    école à Uccle.</p>
+            <div class="mouse-overlay">
+                <div class="card text-shadow">
+                    <h2 lang="en">My name is Guillaume. </h2>
+                    <h2 lang="fr">Je m'appelle Guillaume. </h2>
+                    <p lang="en">I am a young apprentice web developer,</p>
+                    <p lang="fr">Je suis un jeune apprenant développeur web,</p>
+                    <p lang="en">and I'm currently learning HTML, CSS, JS & PHP at the <a href="https://www.efp.be"
+                            class="inline-link" target="_blank">EFP</a>, a school in Uccle.</p>
+                    <p lang="fr">j'étudie l'HTML, le CSS, le JS et le PHP à l'<a href="https://www.efp.be"
+                            class="inline-link" target="_blank">EFP</a>, une
+                        école à Uccle.</p>
+                </div>
             </div>
             <div class=" waves-top divider top">
                 <div class="top layer1 animation-start waves-hover"></div>
@@ -61,15 +70,6 @@
         </section>
         <!-- </div> -->
         <section class="flex magenta scroll-snap-point">
-            <div class="text-container text-shadow">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa assumenda a ipsum aperiam est
-                    excepturi provident, tempora sunt cupiditate, dolores, earum placeat voluptatem autem quidem.
-                    Odio
-                    magnam ipsum deserunt unde numquam necessitatibus incidunt expedita nostrum eius mollitia
-                    possimus
-                    quas beatae repellat ducimus, blanditiis deleniti? Pariatur ut perspiciatis labore fugit
-                    reprehenderit?</p>
-            </div>
         </section>
         <section class="scroll-snap-point">
             <div class=" waves-bottom divider bottom">
@@ -87,9 +87,6 @@
     <script src="public/js/mouse-overlay.js"></script>
     <script src="public/js/modules/canvas.js" type="module"></script>
 
-    <!-- Classes -->
-    <script src="public/js/modules/Cube.js" type="module"></script>
-    <script src="public/js/modules/Point.js" type="module"></script>
 </body>
 
 </html>

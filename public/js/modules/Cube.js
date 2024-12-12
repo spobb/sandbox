@@ -28,15 +28,15 @@ export class Cube {
         this.linePairs = [[0, 1], [1, 2], [2, 3], [3, 0], [4, 5], [5, 6], [6, 7], [7, 4], [0, 4], [1, 5], [2, 6], [3, 7]];
     }
 
-    // check collisions with walls
+    // collisions
     checkCollisions() {
-        if (this.x > (canvas.width - this.size - this.depth)) {
+        if (this.x > (canvas.width - this.size)) {
             this.velocity.x *= -1;
         }
         if (this.x < (0)) {
             this.velocity.x *= -1;
         }
-        if (this.y > (canvas.height - this.size - this.depth)) {
+        if (this.y > (canvas.height - this.size)) {
             this.velocity.y *= -1;
         }
         if (this.y < (12 + this.size)) {
@@ -45,10 +45,6 @@ export class Cube {
     }
 
     updatePos() {
-        // update position of object based on current velocity
-        this.x += this.velocity.x;
-        this.y += this.velocity.y;
-        this.z += this.velocity.z;
 
         // update position of each vertex based on rotation
 
@@ -91,5 +87,15 @@ export class Cube {
             v.z = z + this.z;
         });
 
+        // update position of object based on current velocity
+        this.x += this.velocity.x;
+        this.y += this.velocity.y;
+        this.z += this.velocity.z;
+
+        this.vertices.forEach(v => {
+            v.x += this.velocity.x;
+            v.y += this.velocity.y;
+            v.z += this.velocity.z;
+        })
     }
 }

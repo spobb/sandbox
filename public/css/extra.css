@@ -110,3 +110,6 @@ canvas {
     background: center / 20% repeat url(/public/assets/background.svg);
     animation: bg-slide 60s infinite linear;
 }
+[lang="fr"] {
+    display: none;
+}

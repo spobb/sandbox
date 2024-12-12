@@ -1,4 +1,5 @@
 :root {
+    /* Controlled by JS */
     --x: 0;
     --y: 0;
     --color: #ffffff;
@@ -7,13 +8,20 @@
     --m: 1rem;
     --l: 1.25rem;
     --xl: 1.5rem;
+    --xxl: 3rem;
+    /* Colors */
+    --bg-main: #191920;
+    --bg-dark: #171718;
+    --text-bright: #f9f9f9;
+    --text-main: #e9e9e9;
+    --text-dim: #a9a9a9;
 }
 * {
     margin: 0;
     padding: 0;
     font-family: Roboto;
     letter-spacing: 2px;
-    color: #eee;
+    color: var(--text-main);
     user-select: none;
 }
 ::-webkit-scrollbar {
@@ -27,21 +35,37 @@ body, html {
     background-color: transparent;
     scroll-snap-type: y mandatory;
 }
+a {
+    text-decoration: none;
+}
+ul {
+    list-style: none;
+}
 header {
     position: sticky;
-    top: 1rem;
-    width: 100%;
-    margin: 0 auto;
+    top: 0;
     left: 0;
+    margin: 0 auto;
+    padding: 0 25vw;
     z-index: 1;
-    border: #222223;
-}
-main {}
-.flex, section {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+    max-width: 100vw;
+    background-color: #171718fc;
+    & > * {
+        height: 100%;
+        min-width: 25%;
+        text-align: center;
+        padding: 2rem;
+    }
+    & a:hover {
+        color: var(--text-bright);
+    }
+    & a:hover ~ a,
+    a:has(~a:hover) {
+        color: var(--text-dim);
+    }
+    & a {
+        color: inherit;
+    }
 }
 .hero {
     height: 100vh;
@@ -50,7 +74,7 @@ main {}
     justify-content: center;
     margin-bottom: 10vh;
     & h1 {
-        font-size: 5rem;
+        font-size: var(--xxl);
     }
     & h2 {
         text-shadow: none;
@@ -58,27 +82,25 @@ main {}
         animation: 1s 4s infinite pulse, .5s 4s 1 blur-transition;
     }
 }
-.card {
-    padding: 2rem;
+section {
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: start;
+    gap: 2rem;
+}
+.card {
     max-width: fit-content;
-    background-color: #181819;
+    padding: 2rem;
+    background-color: #171718;
     border-radius: 1rem;
-    gap: 1rem;
     & > * {
         font-size: var(--l);
     }
-    & h2 {
-        font-size: var(--xl);
-        padding-bottom: 1rem;
-    }
 }
-a {
-    text-decoration: none;
-    padding: 1rem;
+h2 {
+    font-size: var(--xl);
 }
+/* utility classes */
 .inline-link {
     color: #eee;
     font-weight: 500;
@@ -92,9 +114,6 @@ a {
 .inline-link:hover {
     color: #aaa;
 }
-.magenta {
-    background-color: #c62368;
-}
 .scroll-snap-point {
     scroll-snap-align: center;
     scroll-snap-stop: always;
@@ -102,6 +121,8 @@ a {
 .text-shadow {
     text-shadow: #0005 0.5rem 0.5rem 1rem;
 }
-[lang="fr"] {
-    display: none;
+.flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

@@ -63,12 +63,6 @@ function createPolygon(coords, color, speed, dir, size, rotationSpeed) {
     let y = coords.y;
     let z = coords.z;
 
-    let half = size * 0.5;
-    let quarter = size * 0.25;
-
-    let depth = size * 0.5;
-
-
     // instantiate Cube object
     let polygon = new Polygon(x, y, z, color, speed, dir, size, rotationSpeed);
 
@@ -131,21 +125,11 @@ function createPrism(coords, color, speed, dir, size, rotationSpeed) {
     prism.faces = faces;
     return prism;
 }
-function project(vertices, width, height) {
-    let points2d = new Array(vertices.length);
-    vertices.forEach((v, i) => {
-        let x = v.x * (FOCAL_LENGTH / v.z) + width * 0.5;
-        let y = v.y * (FOCAL_LENGTH / v.z) + height * 0.5;
-        console.log(x, y, v.x, v.y, vertices[0], vertices[1])
-        points2d[i] = { x: x, y: y };
-    })
-    return points2d;
-}
 function createLine(startPoint, endPoint, color) {
     ctx.beginPath();
     ctx.strokeStyle = color;
     ctx.fillStyle = color;
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 1;
 
     // create line between centers of two points
     ctx.moveTo(startPoint.x, startPoint.y)
@@ -191,7 +175,7 @@ function getDirection() {
     return Math.random() * Math.PI * 2
 }
 function getColor(alpha) {
-    return `rgba(100, 100, 120, ${(300 - alpha) / 255})`;
+    return `rgba(100, 100, 120, ${(250 - alpha) / 255})`;
 }
 
 const DRAW_CENTER = false;
@@ -202,12 +186,12 @@ let points = [];
 let cubes = [];
 let prisms = [];
 let polygons = [];
-let colors = ['#cccccc', '#aaaaaa', '#aaaaaa', '#999999', '#999999', '#444444',]
+let colors = ['#eee', '#ddd', '#ddd', '#ccc', '#ccc', '#bbb']
 
-export let size = 0;
-export let count = 200;
+export let size = 2;
+export let count = 100;
 export let cubeCount = 20;
-export let polygonCount = 20;
+export let polygonCount = 10;
 export let prismCount = 20;
 
 let distanceToConnect = 256;
@@ -334,22 +318,22 @@ for (let i = 0; i < count; ++i) {
     points.push(point);
 }
 for (let i = 0; i < cubeCount; i++) {
-    let cube = createCube(getCoords(), '#4f4f5f', .5, getDirection(), clamp(Math.random() * 80, 20, 80), getRotationSpeed());
+    let cube = createCube(getCoords(), '#4f4f5f', .5, getDirection(), clamp(Math.random() * 50, 20, 50), getRotationSpeed());
     cubes.push(cube);
 }
 for (let i = 0; i < polygonCount; i++) {
-    let polygon = createPolygon(getCoords(), '#4f4f5f', .2, getDirection(), clamp(Math.random() * 80, 20, 80), getRotationSpeed());
+    let polygon = createPolygon(getCoords(), '#4f4f5f', .2, getDirection(), clamp(Math.random() * 50, 20, 50), getRotationSpeed());
     polygons.push(polygon);
 }
 for (let i = 0; i < prismCount; i++) {
-    let prism = createPrism(getCoords(), '#4f4f5f', .5, getDirection(), clamp(Math.random() * 100, 30, 100), getRotationSpeed());
+    let prism = createPrism(getCoords(), '#4f4f5f', .5, getDirection(), clamp(Math.random() * 50, 30, 50), getRotationSpeed());
     prisms.push(prism);
 }
 
 // Add a cube at cursor position on click
 
 document.addEventListener('click', e => {
-    cubes.push(createCube({ x: e.pageX, y: e.pageY, z: 100 }, '#4f4f5f', .5, getDirection(), clamp(Math.random() * 50, 10, 50), getRotationSpeed()));
+    cubes.push(createCube({ x: e.pageX, y: e.pageY, z: -100 }, '#4f4f5f', .5, getDirection(), clamp(Math.random() * 40, 10, 40), getRotationSpeed()));
 
     // polygons.push(createPolygon({ x: e.pageX, y: e.pageY, z: 100 }, '#4f4f5f', 1, getDirection(), Math.random() * 200, getRotationSpeed()));
 })
@@ -358,7 +342,7 @@ document.addEventListener('click', e => {
 setInterval(() => {
     height = document.body.scrollHeight;
     width = document.body.scrollWidth;
-    canvas.style.background = "#191920"
+    canvas.style.background = "#111"
     canvas.style.height = `${width}px`;
     canvas.style.height = `${height}px`;
     canvas.width = width;

@@ -1,9 +1,9 @@
-@keyframes blur-transition {
+@keyframes hero-hello {
     from {
         filter: blur(10px);
         color: transparent;
     }
-    to {
+    10% {
         filter: blur(0);
         color: #eee;
     }

@@ -2,25 +2,29 @@
     /* Controlled by JS */
     --x: 0;
     --y: 0;
-    --color: #ffffff;
+    --color: var(--text-hover);
     /* Font sizes */
-    --s: .5rem;
+    --s: .95rem;
     --m: 1rem;
-    --l: 1.25rem;
+    --l: 1.1rem;
     --xl: 1.5rem;
     --xxl: 3rem;
     /* Colors */
     --bg-main: #191920;
     --bg-dark: #171718;
-    --text-bright: #f9f9f9;
-    --text-main: #e9e9e9;
-    --text-dim: #a9a9a9;
+    --bg-dark-trans: #171718f5;
+    --text-hover: #7fbe97;
+    --text-main: #eee;
+    --text-second: #ccc;
+    --text-dim: #777;
+    /**/
 }
 * {
     margin: 0;
     padding: 0;
     font-family: Roboto;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
+    line-height: 3rem;
     color: var(--text-main);
     user-select: none;
 }
@@ -32,8 +36,8 @@ html {
     scrollbar-width: none;
 }
 body, html {
-    background-color: transparent;
     scroll-snap-type: y mandatory;
+    background-color: transparent;
 }
 a {
     text-decoration: none;
@@ -42,22 +46,25 @@ ul {
     list-style: none;
 }
 header {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
     position: sticky;
     top: 0;
     left: 0;
-    margin: 0 auto;
-    padding: 0 25vw;
+    margin-bottom: -8vh;
+    height: 8vh;
     z-index: 1;
-    max-width: 100vw;
-    background-color: #171718fc;
-    & > * {
-        height: 100%;
+    background-color: var(--bg-dark-trans);
+    & * {
         min-width: 25%;
         text-align: center;
-        padding: 2rem;
+        transition: color .5s;
+        font-size: var(--l);
+        padding: .5rem;
     }
+    /* style hovered option, dim others */
     & a:hover {
-        color: var(--text-bright);
+        color: var(--text-hover);
     }
     & a:hover ~ a,
     a:has(~a:hover) {
@@ -66,21 +73,28 @@ header {
     & a {
         color: inherit;
     }
+    & .header-right {
+        margin-left: auto;
+    }
+    transition: top 1s;
 }
 .hero {
     height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     margin-bottom: 10vh;
     & h1 {
-        font-size: var(--xxl);
+        font-size: var(--m);
+        color: var(--text-dim);
     }
     & h2 {
-        text-shadow: none;
-        font-size: 1.2rem;
-        animation: 1s 4s infinite pulse, .5s 4s 1 blur-transition;
+        font-size: var(--xxl);
     }
+    & p {
+        font-size: var(--l);
+        color: var(--text-second);
+    }
+}
+.transition {
+    animation: 5s 1 hero-hello;
 }
 section {
     height: 100vh;
@@ -92,7 +106,6 @@ section {
     max-width: fit-content;
     padding: 2rem;
     background-color: #171718;
-    border-radius: 1rem;
     & > * {
         font-size: var(--l);
     }
@@ -113,10 +126,6 @@ h2 {
 }
 .inline-link:hover {
     color: #aaa;
-}
-.scroll-snap-point {
-    scroll-snap-align: center;
-    scroll-snap-stop: always;
 }
 .text-shadow {
     text-shadow: #0005 0.5rem 0.5rem 1rem;

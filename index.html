@@ -20,11 +20,14 @@
 <body>
     <canvas>
     </canvas>
-    <header class="flex">
-        <a href="#About">About</a>
-        <a href="#Portfolio">My portfolio</a>
-        <a href="#contact">Contact</a>
-        <div class="language-switch" id="lang-picker">
+    <header>
+        <div class="header-left"></div>
+        <nav class="flex">
+            <a href="#about">About me</a>
+            <a href="#portfolio">My portfolio</a>
+            <a href="#contact">Contact me</a>
+        </nav>
+        <select class="language-switch flex header-right" id="lang-picker">
             <label>
                 <input type="radio" name="lang" value="en" checked>
                 EN
@@ -33,49 +36,30 @@
                 <input type="radio" name="lang" value="fr">
                 FR
             </label>
-        </div>
+        </select>
     </header>
     <main>
-        <!-- <div class="moving-bg"> -->
-        <section class="flex hero scroll-snap-point">
-            <h1 class="transition text-shadow" lang="en">Hello!</h1>
-            <h1 class="transition text-shadow" lang="fr">Bonjour !</h1>
-            <!-- <h2 class="transition text-shadow" lang="en">Click anywhere to continue</h2>
-                <h2 class="transition text-shadow" lang="fr">Appuyez n'importe où pour continuer.</h2> -->
-        </section>
-        <section class="scroll-snap-point">
-            <div class="mouse-overlay">
-                <div class="card text-shadow">
-                    <h2 lang="en">My name is Guillaume. </h2>
-                    <h2 lang="fr">Je m'appelle Guillaume. </h2>
-                    <p lang="en">I am a young apprentice web developer,</p>
-                    <p lang="fr">Je suis un jeune apprenant développeur web,</p>
-                    <p lang="en">and I'm currently learning HTML, CSS, JS & PHP at the <a href="https://www.efp.be"
-                            class="inline-link" target="_blank">EFP</a>, a school in Uccle.</p>
-                    <p lang="fr">j'étudie l'HTML, le CSS, le JS et le PHP à l'<a href="https://www.efp.be"
-                            class="inline-link" target="_blank">EFP</a>, une
-                        école à Uccle.</p>
-                </div>
+        <section class="flex hero">
+            <div class="container">
+                <h1 lang="en">Hello, my name is</h1>
+                <h2>Guillaume Verlaeken</h2>
+                <p>I am a beginner web developer, currently studying at the EFP in Uccle</p>
             </div>
-            <!-- <div class=" waves-top divider top">
-                <div class="top layer1 animation-start waves-hover"></div>
-                <div class="top layer2 animation-start waves-hover"></div>
-                <div class="top layer3 animation-start waves-hover"></div>
-                <div class="top layer4 animation-start waves-hover"></div>
-                <div class="top layer5 animation-start waves-hover"></div>
-            </div> -->
         </section>
-        <!-- </div> -->
-        <section class="flex magenta scroll-snap-point">
+        <section>
+            <div class="card text-shadow">
+                <h2 lang="en">My name is Guillaume. </h2>
+                <h2 lang="fr">Je m'appelle Guillaume. </h2>
+                <p lang="en">I am a young apprentice web developer,</p>
+                <p lang="fr">Je suis un jeune apprenant développeur web,</p>
+                <p lang="en">and I'm currently learning HTML, CSS, JS & PHP at the <a href="https://www.efp.be"
+                        class="inline-link" target="_blank">EFP</a>, a school in Uccle.</p>
+                <p lang="fr">j'étudie l'HTML, le CSS, le JS et le PHP à l'<a href="https://www.efp.be"
+                        class="inline-link" target="_blank">EFP</a>, une
+                    école à Uccle.</p>
+            </div>
         </section>
-        <section class="scroll-snap-point">
-            <!-- <div class=" waves-bottom divider bottom">
-                <div class="bottom-layer1 animation-start waves-hover"></div>
-                <div class="bottom-layer2 animation-start waves-hover"></div>
-                <div class="bottom-layer3 animation-start waves-hover"></div>
-                <div class="bottom-layer4 animation-start waves-hover"></div>
-                <div class="bottom-layer5 animation-start waves-hover"></div>
-            </div> -->
+        <section>
         </section>
     </main>
     <div class="mouse-overlay"></div>

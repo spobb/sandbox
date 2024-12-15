@@ -4,17 +4,14 @@ canvas {
     left: 0;
     z-index: -10;
     width: 100vw;
-    transform: scale(1.01);
     height: 100%;
-    filter: blur(1px) brightness(100%);
-    transition: filter 1s
+    transition: filter 1s;
 }
 .mouse-overlay {
     position: relative;
     background-color: #222223;
-    margin: 8rem;
+    margin: 1rem;
     padding: .5rem;
-    border-radius: 1rem;
     max-width: fit-content;
     &::before {
         content: '';
@@ -42,9 +39,6 @@ canvas {
     width: 100%;
     height: 100vh;
     overflow-y: hidden;
-}
-.transition {
-    animation: blur-transition 2s 1;
 }
 .divider > * {
     position: absolute;
@@ -110,6 +104,6 @@ canvas {
     background: center / 20% repeat url(/public/assets/background.svg);
     animation: bg-slide 60s infinite linear;
 }
-[lang="fr"] {
+:lang(fr) {
     display: none;
 }
